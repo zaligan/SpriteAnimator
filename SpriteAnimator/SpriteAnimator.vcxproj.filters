@@ -136,6 +136,12 @@
     <Filter Include="Resource Files\engine\font\min">
       <UniqueIdentifier>{1b103960-f11a-4515-b4f1-f59333ce00d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SpriteAnimator">
+      <UniqueIdentifier>{47421fa0-c397-491b-9526-1b152acefe3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\spriteSheet">
+      <UniqueIdentifier>{9d855bb0-7c61-40e5-85f4-be99ff1a415a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -143,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteAnimator\SpriteAnimator.cpp">
+      <Filter>SpriteAnimator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +226,9 @@
     </Image>
     <Image Include="App\example\obj\siv3d-kun-eye.png">
       <Filter>Resource Files\example\obj</Filter>
+    </Image>
+    <Image Include="App\spriteSheet\explosion.png">
+      <Filter>Resource Files\spriteSheet</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -775,6 +787,9 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteAnimator\SpriteAnimator.hpp">
+      <Filter>SpriteAnimator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
