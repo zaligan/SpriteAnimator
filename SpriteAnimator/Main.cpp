@@ -3,12 +3,17 @@
 
 void Main()
 {
-	Texture explosion{U"spriteSheet/explosion.png"};
+	Effect effect;
 
-	SpriteAnimator spriteAnimator{ explosion,Point{1,1},1.0,1.0 };
+	Texture explosion{U"spriteSheet/explosion.png"};
 
 	while (System::Update())
 	{
-		explosion.drawAt(200, 200);
+		if (MouseL.down())
+		{
+			Print << U"表示します";
+			effect.add<SpriteAnimator>(explosion, Point{ 8,2 }, Cursor::Pos(), 1.0, 0.05);
+		}
+		effect.update();
 	}
 }
