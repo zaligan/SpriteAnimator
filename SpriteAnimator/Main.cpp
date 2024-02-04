@@ -7,15 +7,24 @@ void Main()
 
 	Texture explosion{U"spriteSheet/explosion.png"};
 
+	Vec2 pos = {0,0};
+
+	Point spriteSize{ 8,2 };
+
+	Point startPoint{ 0,0 };
+
 	while (System::Update())
 	{
-		Vec2 pos = Cursor::Pos();
+		pos = Cursor::Pos();
+
 		if (MouseL.down())
 		{
-			Print << U"表示します";
-			
-			effect.add<SpriteAnimator>(explosion, Point{ 8,2 }, &pos, 1.0, 0.05);
+			//エフェクトを追加します。
+			SpriteAnimatorConfig config(explosion, spriteSize, startPoint, pos, 0.05, 1);
+			effect.add<SpriteAnimator>(config);
 		}
+
+		//エフェクトの状態を更新します。
 		effect.update();
 	}
 }
