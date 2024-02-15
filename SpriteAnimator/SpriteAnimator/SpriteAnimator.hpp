@@ -2,47 +2,22 @@
 # include <Siv3D.hpp>
 
 // SpriteAnimatorの設定を保持する構造体
-struct SpriteAnimatorConfig
+struct SpriteConfig
 {
+	/// @brief スプライトシートの画像ファイル
 	Texture texture;
+
+	/// @brief スプライトシートのコマ数(行、列)
 	Point spriteSize;
-	Point startIndex;
-	Vec2 pos;
+
+	/// @brief １コマの描画時間(秒)
 	double frmTime;
+
+	/// @brief 描画するサイズの倍率です。
 	double resize;
 
-	SpriteAnimatorConfig() = default;
-
-	/// @brief SpriteAnimatorConfigを作成します。
-	/// @param texture spriteSheetの画像ファイル
-	/// @param spriteSize spriteSheetのコマ数(行、列)
-	/// @param startIndex spriteSheetの開始位置(行、列)
-	/// @param pos 描画する座標
-	/// @param frmTime 1コマの描画時間(秒)
-	/// @param resize 描画するサイズの倍率
-	SpriteAnimatorConfig(const Texture& texture, const Point& spriteSize, const Point& startIndex, const Vec2& pos, double frmTime, double resize):
-		texture(texture),
-		spriteSize(spriteSize),
-		pos(pos),
-		frmTime(frmTime),
-		resize(resize)
-	{
-		// startIndexがスプライトシートの範囲外の場合はエラーを投げる
-		if (spriteSize.x < startIndex.x || startIndex.x < 0 || spriteSize.y < startIndex.y || startIndex.y < 0)
-		{
-			throw Error(U"SpriteAnimator: startIndex is out of range");
-		}
-		else
-		{
-			this->startIndex = startIndex;
-		}
-	}
-
-	SpriteAnimatorConfig(const Texture& texture, const Point& spriteSize, const Vec2& pos, double frmTime, double resize) :
-		SpriteAnimatorConfig(texture, spriteSize, Point(0, 0), pos, frmTime, resize) {}
-
-	SpriteAnimatorConfig(const Texture& texture, const Point& spriteSize, const Vec2& pos, double frmTime) :
-		SpriteAnimatorConfig(texture, spriteSize, Point(0, 0), pos, frmTime, 1.0) {}
+	/// @brief アニメーションの開始位置(行、列)
+	Point startIndex = { 0,0 };
 
 };
 
@@ -66,21 +41,29 @@ struct SpriteAnimator:IEffect
 	/// @brief 描画するサイズの倍率
 	double m_resize = 1.0;
 
-	/// @brief 描画する座標です。
+	/// @brief 描画する座標です。(中心座標)
 	Vec2 m_pos = { 0,0 };
 
 	SpriteAnimator() = default;
 
-
-	SpriteAnimator(const SpriteAnimatorConfig& config) :
+	/// @brief SpriteAnimatorを作成します。
+	/// @param config spriteSheetの設定です。
+	/// @param pos 描画する座標です。
+	/// @param startIndex 描画するコマの開始位置(行、列)です。
+	SpriteAnimator(const SpriteConfig& config, const Vec2& pos, const Point& startIndex) :
 		m_texture(config.texture),
 		m_spriteSize(config.spriteSize),
-		m_startIndex(config.startIndex),
-		m_pos(config.pos),
 		m_frmTime(config.frmTime),
-		m_resize(config.resize) {}
+		m_resize(config.resize),
+		m_pos(pos),
+		m_startIndex(startIndex)
+	{}
 
-	// IEffectを継承したupdate関数を実装
+	SpriteAnimator(const SpriteConfig& config, const Vec2& pos) :
+		SpriteAnimator(config, pos, config.startIndex)
+	{}
+
+	// IEffect を継承した update 関数を実装
 	bool update(double t) override
 	{
 		// 現在のコマを計算
@@ -90,7 +73,7 @@ struct SpriteAnimator:IEffect
 		m_index.y = currentFrm / m_spriteSize.x;
 
 		// 現在のコマを描画
-		m_texture.uv(static_cast<double>(m_index.x) / m_spriteSize.x, static_cast<double>(m_index.y) / m_spriteSize.y, 1.0 / m_spriteSize.x, 1.0 / m_spriteSize.y).scaled(m_resize).draw(m_pos);
+		m_texture.uv(static_cast<double>(m_index.x) / m_spriteSize.x, static_cast<double>(m_index.y) / m_spriteSize.y, 1.0 / m_spriteSize.x, 1.0 / m_spriteSize.y).scaled(m_resize).draw(Arg::center(m_pos));
 
 		// 現在のコマがスプライトシートのコマ数を超えたら再生を終了
 		return currentFrm < m_spriteSize.area();
