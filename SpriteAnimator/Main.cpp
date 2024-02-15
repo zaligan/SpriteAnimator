@@ -18,7 +18,7 @@ void Main()
 	Point startPoint{ 0,0 };
 
 	// スプライトシートの設定を保持する構造体を作成します。
-	SpriteConfig config(explosion, spriteSize, 0.05, 1, startPoint);
+	SpriteConfig config(explosion, spriteSize, 0.05, 1.5, startPoint);
 
 	while (System::Update())
 	{
